@@ -11,14 +11,16 @@ should be checked using a policy.
 ## Environment variables
 - `SONAR_TOKEN` - The sonar server token.
 - `SONAR_TYPE` - Should be Either SAAS or SELFHOSTED, defaulting to SAAS.
-- `SONAR_HOST` - The sonar server host name, for example sonar.myconpany.org. required for SELFHOSTED type, if not provided for SAAS type sonarcloud.io is used as default.
+- `SONAR_HOST_URL` - The sonar server host name, for example sonar.myconpany.org. required for SELFHOSTED type, if not provided for SAAS type sonarcloud.io is used as default.
+- `SONAR_PROXY_URL` - The proxy server URL, in the format of http://your-proxy-server:port. or https://username:password@your-proxy-server:port
 
 ## Arguments
 `--reportTaskFile=<path>` - The path to the sonar report task file.
-
 `--FailOnAnalysisFailure` - Fail with exit code 1 if the sonar analysis failed in sonar quality gate.
-
-
+`--WaitTime=<seconds>` - between sonar analysis results checks>
+`--MaxRetries=<number>` - The maximum number of retries to check the sonar analysis results.
+`--UseProxy` - Use a proxy server URL, requires PROXY_URL environment variable to be set.
+ 
 ## The example is based on the following steps:
 1. set sonar token as an environment variable
 2. call sonar scan
