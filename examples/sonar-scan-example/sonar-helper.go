@@ -10,13 +10,14 @@ import (
 	"time"
     "bufio"
     "strings"
+    "net/url"
   )
 
 const (
 	SELFHOSTED_ANALYSIS_URL = "https://$sonarhost/api/qualitygates/project_status?analysisId=$analysisId"
 
 )
-func runReport(ctx context.Context, logger *log.Logger,  sonarHost string , sonar_token string, reportTaskFile string, failOnAnalysisFailure bool,  maxRetries int, waitTime int)  (SonarResponse, error) {
+func runReport(ctx context.Context, logger *log.Logger,  sonarHost string, proxyURL string,  sonar_token string, reportTaskFile string, failOnAnalysisFailure bool,  maxRetries int, waitTime int)  (SonarResponse, error) {
     logger.Println("Running sonar analysis extraction")
 
     // fmt.Println("reportTaskFile: ", reportTaskFile)
@@ -56,15 +57,35 @@ func runReport(ctx context.Context, logger *log.Logger,  sonarHost string , sona
 		fmt.Printf("ceTaskUrl Key not found")
 		return SonarResponse{}, fmt.Errorf("ceTaskUrl Key not found")
 	}
-    // Add a reusable HTTP client
-	var client = &http.Client{
-		Timeout: DEFAULT_HTTP_TIMEOUT,
-		Transport: &http.Transport{
+
+	// Add a reusable HTTP client
+	var transport *http.Transport
+
+	if proxyURL != "" {
+	    logger.Println("Using proxy url")
+        proxy, err := url.Parse(proxyURL)
+        if err != nil {
+            log.Fatal(err)
+        }
+        transport = &http.Transport{
+            Proxy: http.ProxyURL(proxy),
+            MaxIdleConns:       100,
+            IdleConnTimeout:    30 * time.Second,
+            DisableCompression: true,
+        }
+    }else {
+        transport = &http.Transport{
 			MaxIdleConns:       100,
-			IdleConnTimeout:    10 * time.Second,
+			IdleConnTimeout:    30 * time.Second,
 			DisableCompression: true,
-		},
+		}
 	}
+
+    var client = &http.Client{
+		Timeout: DEFAULT_HTTP_TIMEOUT,
+		Transport: transport,
+	}
+
 	logger.Println("ceTaskUrl", ceTaskUrl)
 	// get the report task
 	retries := 0

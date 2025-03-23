@@ -99,6 +99,7 @@ func main() {
     failOnAnalysisFailure := false
     maxRetries := 1
     waitTime := 5
+    proxyURL := ""
     if len(os.Args) > 0 {
         // loop over all args
         for i, arg := range os.Args {
@@ -123,6 +124,13 @@ func main() {
                     logger.Println("Invalid wait time argument:",waitTimeStr , "error:" ,err)
                     os.Exit(1)
                 }
+            } else if strings.HasPrefix(arg, "--UseProxy") {
+                proxyURL = os.Getenv("SONAR_PROXY_URL")
+
+                if proxyURL == "" {
+                    logger.Println("SONAR_PROXY_URL not found, set SONAR_PROXY_URL variable when using --UseProxy argument")
+                    os.Exit(1)
+                }
             }
         }
         logger.Println("reportTaskFile:", reportTaskFile)
@@ -132,7 +140,7 @@ func main() {
      }
     response := SonarResponse{}
     defaultSonarHost := "sonarcloud.io"
-    sonarHost := os.Getenv("SONAR_HOST")
+    sonarHost := os.Getenv("SONAR_HOST_URL")
 
     if sonar_type == "SAAS" {
         if sonarHost == "" {
@@ -142,12 +150,12 @@ func main() {
 
     }else if sonar_type == "SELFHOSTED" {
         if sonarHost == "" {
-            logger.Println("Sonar host not found, set SONAR_HOST variable")
+            logger.Println("Sonar host not found, set SONAR_HOST_URL variable")
             os.Exit(1)
         }
         logger.Println("Running sonar analysis extraction for " , sonar_type,  " server", sonarHost)
     }
-    response, err = runReport(ctx, logger, sonarHost, sonar_token, reportTaskFile, failOnAnalysisFailure,  maxRetries, waitTime)
+    response, err = runReport(ctx, logger, sonarHost, proxyURL, sonar_token, reportTaskFile, failOnAnalysisFailure,  maxRetries, waitTime)
 
     if err != nil {
         logger.Println("Error in generating report predicate:", err)
