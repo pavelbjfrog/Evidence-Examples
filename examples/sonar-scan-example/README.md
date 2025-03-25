@@ -11,7 +11,7 @@ should be checked using a policy.
 ## Environment variables
 - `SONAR_TOKEN` - The sonar server token.
 - `SONAR_TYPE` - Should be Either SAAS or SELFHOSTED, defaulting to SAAS.
-- `SONAR_HOST_URL` - The sonar server host name, for example sonar.myconpany.org. required for SELFHOSTED type, if not provided for SAAS type sonarcloud.io is used as default.
+- `SONAR_HOST_URL` - The sonar server host name, for example https://mysonar.mycorp.com, for example sonar.myconpany.org. required for SELFHOSTED type, if not provided for SAAS type sonarcloud.io is used as default.
 - `SONAR_PROXY_URL` - The proxy server URL, in the format of http://your-proxy-server:port. or https://username:password@your-proxy-server:port
 
 ## Arguments
