@@ -139,7 +139,7 @@ func main() {
         logger.Println("WaitTime:", waitTime)
      }
     response := SonarResponse{}
-    defaultSonarHost := "sonarcloud.io"
+    defaultSonarHost := "https://sonarcloud.io"
     sonarHost := os.Getenv("SONAR_HOST_URL")
 
     if sonar_type == "SAAS" {

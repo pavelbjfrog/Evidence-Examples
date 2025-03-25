@@ -14,7 +14,7 @@ import (
   )
 
 const (
-	SELFHOSTED_ANALYSIS_URL = "https://$sonarhost/api/qualitygates/project_status?analysisId=$analysisId"
+	SELFHOSTED_ANALYSIS_URL = "$sonarhost/api/qualitygates/project_status?analysisId=$analysisId"
 
 )
 func runReport(ctx context.Context, logger *log.Logger,  sonarHost string, proxyURL string,  sonar_token string, reportTaskFile string, failOnAnalysisFailure bool,  maxRetries int, waitTime int)  (SonarResponse, error) {
