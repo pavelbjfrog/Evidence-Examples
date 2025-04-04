@@ -66,7 +66,7 @@ jobs:
         run: jf rt build-collect-env ${{ vars.BUILD_NAME }} ${{ github.run_number }}
 
       - name: Publish build info
-        run: jfrog rt build-publish ${{ vars.BUILD_NAME }} ${{ github.run_number }}
+        run: jfrog rt build-publish ${{ vars.BUILD_NAME }} ${{ github.run_number }} --project example-project
 
       - name: Sign build evidence
         run: |
