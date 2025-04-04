@@ -16,7 +16,7 @@ jobs:
         env:
           JF_URL: ${{ vars.ARTIFACTORY_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }}
-          JF_PROJECT: ${{ secrets.ARTIFACTORY_PROJECT_KEY }}
+          JF_PROJECT: ${{ vars.ARTIFACTORY_PROJECT_KEY }}
 
       - uses: actions/checkout@v4
 
