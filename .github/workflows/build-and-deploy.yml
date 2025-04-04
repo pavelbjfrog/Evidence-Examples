@@ -80,7 +80,7 @@ jobs:
       - name: Create release bundle
         run: |
           echo '{ "files": [ {"build": "'"${{ vars.BUILD_NAME }}/${{ github.run_number }}"'" } ] }' > bundle-spec.json
-          jf release-bundle-create bunevi ${{ github.run_number }} --spec bundle-spec.json --sync=true
+          jf release-bundle-create ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} --spec bundle-spec.json --sync=true
          
   Promote-to-qa-and-test:
     needs: Docker-build-with-evidence    
@@ -95,13 +95,13 @@ jobs:
           
       - name: Promote to QA
         run: |
-          jf release-bundle-promote bunevi ${{ github.run_number }} QA --sync=true
+          jf release-bundle-promote ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} QA --sync=true
           echo "🚀 Succesfully promote to \`QA\` environemnt" >> $GITHUB_STEP_SUMMARY
 
       - name: Evidence on release-bundle
         run: |
           echo '{ "actor": "${{ github.actor }}", "date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'", "test": "CI test", "result": "success" }' > test_evidence.json
-          jf evd create --release-bundle bunevi --release-bundle-version ${{ github.run_number }} \
+          jf evd create --release-bundle ${{ vars.BUNDLE_NAME }} --release-bundle-version ${{ github.run_number }} \
             --predicate ./test_evidence.json --predicate-type https://jfrog.com/evidence/testing-results/v1 \
             --key "${{ secrets.PRIVATE_KEY }}"
           echo '🔎 Evidence attached: integration-test 🧪 ' >> $GITHUB_STEP_SUMMARY
