@@ -82,7 +82,7 @@ jobs:
           echo '{ "files": [ {"build": "'"${{ vars.BUILD_NAME }}/${{ github.run_number }}"'" } ] }' > bundle-spec.json          
           # Create the release bundle
           jf release-bundle-create \
-          "${{ vars.BUNDLE_NAME }}" \
+          "bunevi" \
           "${{ github.run_number }}" \
           --spec bundle-spec.json \
           --sync=true
