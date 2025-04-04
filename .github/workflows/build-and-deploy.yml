@@ -101,7 +101,7 @@ jobs:
       - name: Evidence on release-bundle
         run: |
           echo '{ "actor": "${{ github.actor }}", "date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'", "test": "CI test", "result": "success" }' > test_evidence.json
-          jf evd create --release-bundle ${{ vars.BUNDLE_NAME }} --release-bundle-version ${{ github.run_number }} \
+          jf evd create --release-bundle bunevi --release-bundle-version ${{ github.run_number }} \
             --predicate ./test_evidence.json --predicate-type https://jfrog.com/evidence/testing-results/v1 \
             --key "${{ secrets.PRIVATE_KEY }}"
           echo '🔎 Evidence attached: integration-test 🧪 ' >> $GITHUB_STEP_SUMMARY
