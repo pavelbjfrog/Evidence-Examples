@@ -95,7 +95,7 @@ jobs:
           
       - name: Promote to QA
         run: |
-          jf release-bundle-promote buievi ${{ github.run_number }} QA --sync=true
+          jf release-bundle-promote bunevi ${{ github.run_number }} QA --sync=true
           echo "🚀 Succesfully promote to \`QA\` environemnt" >> $GITHUB_STEP_SUMMARY
 
       - name: Evidence on release-bundle
