@@ -80,7 +80,6 @@ jobs:
       - name: Create release bundle
         run: |
           echo '{ "files": [ {"build": "'"${{ vars.BUILD_NAME }}/${{ github.run_number }}"'" } ] }' > bundle-spec.json
-         #jf release-bundle-create ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} --spec bundle-spec.json --sync=true
           jf release-bundle-create ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} --build-name ${{ vars.BUILD_NAME }} --build-number ${{ github.run_number }}
          
           # Generate links to the release bundle
