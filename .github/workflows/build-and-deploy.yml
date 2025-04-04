@@ -79,9 +79,8 @@ jobs:
           
       - name: Create release bundle
         run: |
-          echo '{ "files": [ {"build": "'"${{ vars.BUILD_NAME }}/${{ github.run_number }}"'" } ] }' > bundle-spec.json
+          echo '{ "files": [ {"build": "'"${{ vars.BUILD_NAME }}/${{ github.run_number }}"'", "project": "'"${{ vars.ARTIFACTORY_PROJECT_KEY }}"'"} ] }' > bundle-spec.json
           jf release-bundle-create ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} --spec bundle-spec.json --sync=true \
-          --project ${{ vars.ARTIFACTORY_PROJECT_KEY }}
          
   Promote-to-qa-and-test:
     needs: Docker-build-with-evidence    
