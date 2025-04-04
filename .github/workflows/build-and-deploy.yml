@@ -92,6 +92,8 @@ jobs:
         env:
           JF_URL: ${{ vars.ARTIFACTORY_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }}
+          JF_PROJECT: ${{ vars.ARTIFACTORY_PROJECT_KEY }}
+
           
       - name: Promote to QA
         run: |
@@ -103,7 +105,7 @@ jobs:
           echo '{ "actor": "${{ github.actor }}", "date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'", "test": "CI test", "result": "success" }' > test_evidence.json
           jf evd create --release-bundle ${{ vars.BUNDLE_NAME }} --release-bundle-version ${{ github.run_number }} \
             --predicate ./test_evidence.json --predicate-type https://jfrog.com/evidence/testing-results/v1 \
-            --key "${{ secrets.PRIVATE_KEY }}"
+            --key "${{ secrets.PRIVATE_KEY }}" --project ${{ vars.ARTIFACTORY_PROJECT_KEY }}
           echo '🔎 Evidence attached: integration-test 🧪 ' >> $GITHUB_STEP_SUMMARY
 
 
@@ -117,6 +119,8 @@ jobs:
         env:
           JF_URL: ${{ vars.ARTIFACTORY_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }}
+          JF_PROJECT: ${{ vars.ARTIFACTORY_PROJECT_KEY }}
+
     
       - name: Checkout
         uses: actions/checkout@v4
