@@ -148,7 +148,7 @@ jobs:
           if [ "${{ env.RESULT }}" == "true" ]; then
             jf evd create --key "${{ secrets.PRIVATE_KEY }}" --key-alias KEY-ALIAS \
               --release-bundle ${{ vars.BUNDLE_NAME }} --release-bundle-version ${{ github.run_number }} \
-              --predicate ./policy.json --predicate-type https://in-toto.io/attestation/link/v0.3 --project ${{ vars.ARTIFACTORY_PROJECT_KEY }}
+              --predicate ./policy.json --predicate-type https://jfrog.com/evidence/approval/v1 --project ${{ vars.ARTIFACTORY_PROJECT_KEY }}
             jf release-bundle-promote ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} PROD  --sync=true
             echo "🚀 Succesfully promote to \`PROD\` environemnt" >> $GITHUB_STEP_SUMMARY
           else
