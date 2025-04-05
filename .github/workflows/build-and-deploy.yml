@@ -39,24 +39,24 @@ jobs:
       - name: Build Docker image
         run: |
           URL=$(echo ${{ vars.ARTIFACTORY_URL }} | sed 's|^https://||')
-          REPO_URL=${URL}'/example-project-docker-dev-virtual'
+          REPO_URL=${URL}'/${{ vars.DEV_VIRTUAL }}'
           docker build --build-arg REPO_URL=${REPO_URL} -f Dockerfile . \
           --tag ${REPO_URL}/${{ vars.APPLICATION_NAME }}:${{ github.run_number }} \
           --output=type=image --platform linux/amd64 --metadata-file=build-metadata --push
-          jf rt build-docker-create example-project-docker-dev-virtual --image-file build-metadata --build-name ${{ vars.BUILD_NAME }} --build-number ${{ github.run_number }}
+          jf rt build-docker-create ${{ vars.DEV_VIRTUAL }} --image-file build-metadata --build-name ${{ vars.BUILD_NAME }} --build-number ${{ github.run_number }}
 
       - name: Evidence on docker
         run: |
           echo '{ "actor": "${{ github.actor }}", "date": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'" }' > sign.json
-          jf evd create --package-name ${{ vars.APPLICATION_NAME }} --package-version ${{ github.run_number }} --package-repo-name example-project-docker-dev-local \
+          jf evd create --package-name ${{ vars.APPLICATION_NAME }} --package-version ${{ github.run_number }} --package-repo-name ${{ vars.DEV_LOCAL }} \
             --key "${{ secrets.PRIVATE_KEY }}"  --key-alias KEY-ALIAS \
             --predicate ./sign.json --predicate-type https://in-toto.io/attestation/scai/attribute-report
           echo '🔎 Evidence attached: `signature` 🔏 ' 
 
       - name: Upload readme file
         run: |
-          jf rt upload ./README.md example-project-generic-dev/readme/${{ github.run_number }}/ --build-name ${{ vars.BUILD_NAME }} --build-number ${{ github.run_number }}
-          jf evd create --subject-repo-path example-project-generic-dev/readme/${{ github.run_number }}/README.md \
+          jf rt upload ./README.md ${{ vars.DEV_GENERIC }}/readme/${{ github.run_number }}/ --build-name ${{ vars.BUILD_NAME }} --build-number ${{ github.run_number }}
+          jf evd create --subject-repo-path ${{ vars.DEV_GENERIC }}/readme/${{ github.run_number }}/README.md \
             --key "${{ secrets.PRIVATE_KEY }}" --key-alias KEY-ALIAS  \
             --predicate ./sign.json --predicate-type https://in-toto.io/attestation/scai/attribute-report
 
@@ -133,7 +133,7 @@ jobs:
 
       - name: Call GraphQL
         run: |
-          ./scripts/graphql.sh ${{ vars.ARTIFACTORY_URL }} ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} example-project-release-bundles-v2 ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} ./evidence-graph.json
+          ./scripts/graphql.sh ${{ vars.ARTIFACTORY_URL }} ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} ${{ vars.ARTIFACTORY_PROJECT_KEY }}-release-bundles-v2 ${{ vars.BUNDLE_NAME }} ${{ github.run_number }} ./evidence-graph.json
           cat ./evidence-graph.json
 
       - name: Run policy
