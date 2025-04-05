@@ -38,7 +38,13 @@ For more information about evidence on the JFrog platform, see Evidence Manageme
 * Make sure the following repository variables are configured in GitHub settings:  
   * ARTIFACTORY_URL (location of your Artifactory installation)  
   * BUILD_NAME (planned name for the build of the Docker image)  
-  * BUNDLE_NAME (planned name for the Release Bundle created from the build)  
+  * BUNDLE_NAME (planned name for the Release Bundle created from the build)
+  * APPLICATION_NAME (planned name for the application you build)
+  * ARTIFACTORY_PROJECT_KEY (planned name for the application you build)
+  * DEV_GENERIC (planned name for the development generic repository)
+  * DEV_LOCAL planned name for the development docker local repository)
+  * DEV_VIRTUAL planned name for the development docker virtual repository
+    
 * Make sure the following repository secrets are configured in GitHub settings:  
   * ARTIFACTORY_ACCESS_TOKEN (access token used for authentication)  
   * JF_USER (your username in Artifactory)  
